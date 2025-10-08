@@ -27,7 +27,7 @@ namespace Login
             this.BackColor = Color.Black;
             this.Opacity = 0.91;
 
-            // Asignamos evento formulario
+            // Asignamos evento 
             this.MouseDown += new MouseEventHandler(Form1_MouseDown);
         }
 
