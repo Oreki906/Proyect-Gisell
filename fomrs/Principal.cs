@@ -61,23 +61,24 @@ namespace Login.fomrs
 
         private void button1_Click(object sender, EventArgs e)
         {
-           
+            label1.Text = "Materias";
             
         }
 
         private void btncalificaciones_Click(object sender, EventArgs e)
         {
-            
+            label1.Text = "Calificaciones";
         }
 
         private void btnalumnos_Click(object sender, EventArgs e)
         {
-            
+            label1.Text = "Alumnos";
         }
 
         private void btnasistencias_Click(object sender, EventArgs e)
         {
             btnasistencias.BackColor = Color.FromArgb(25, 42, 86);
+            label1.Text = "Asistencias";
         }
 
         private void panel1_MouseDown(object sender, MouseEventArgs e)
