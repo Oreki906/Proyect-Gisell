@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,6 +20,9 @@ namespace Login.fomrs
         private extern static void ReleaseCapture();
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
         private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
+
+        // En esta lista guardamos las tarjetas que corresponden a las materias.
+        private List<Panel> listaTarjetas = new List<Panel>();
 
         private void panelTitle_MouseDown(object sender, MouseEventArgs e)
         {
@@ -62,23 +66,45 @@ namespace Login.fomrs
         private void button1_Click(object sender, EventArgs e)
         {
             label1.Text = "Materias";
-            
+            flowLayoutPanel1.Controls.Clear();
+            foreach (var t in listaTarjetas)
+            {
+                flowLayoutPanel1.Controls.Add(t);
+            }
+
         }
 
         private void btncalificaciones_Click(object sender, EventArgs e)
         {
             label1.Text = "Calificaciones";
+            flowLayoutPanel1.Controls.Clear();
         }
 
         private void btnalumnos_Click(object sender, EventArgs e)
         {
             label1.Text = "Alumnos";
+            flowLayoutPanel1.Controls.Clear();
+            DataGridView alumnos = new DataGridView();
+            flowLayoutPanel1.Controls.Add(alumnos);
+            alumnos.Size = flowLayoutPanel1.Size;
+            alumnos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            alumnos.Columns.Add("alumnos", "Alumnos");
+            alumnos.Columns.Add("calificaciones", "Calificaciones");
         }
 
         private void btnasistencias_Click(object sender, EventArgs e)
         {
             btnasistencias.BackColor = Color.FromArgb(25, 42, 86);
             label1.Text = "Asistencias";
+            flowLayoutPanel1.Controls.Clear();
+
+            DataGridView asistencias = new DataGridView();
+            flowLayoutPanel1.Controls.Add(asistencias);
+            asistencias.Size = flowLayoutPanel1.Size;
+            asistencias.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            asistencias.Columns.Add("alumnos", "Alumnos");
+            asistencias.Columns.Add("asistencias", "Asistencias");
+
         }
 
         private void panel1_MouseDown(object sender, MouseEventArgs e)
@@ -124,12 +150,24 @@ namespace Login.fomrs
             tarjeta.Controls.Add(lbl);
             tarjeta.Controls.Add(btnAbrir);
 
-            // Agregar tarjeta al FlowLayoutPanel
-            flowLayoutPanel1.Controls.Add(tarjeta);
+            // Agregar controles a la lista de tarjetas
+            listaTarjetas.Add(tarjeta);
+
+            // Agregar tarjetas al FlowLayoutPanel
+            foreach (var t in listaTarjetas)
+            {
+                flowLayoutPanel1.Controls.Add(tarjeta);
+            }
+
         }
         private int contador = 1;
         private void button1_Click_1(object sender, EventArgs e)
         {
+            flowLayoutPanel1.Controls.Clear();
+            foreach (var t in listaTarjetas)
+            {
+                flowLayoutPanel1.Controls.Add(t);
+            }
             CrearMateria($"Materia {contador}");
             contador++;
         }
