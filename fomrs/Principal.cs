@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -10,12 +11,108 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace Login.fomrs
 {
     public partial class Principal : Form
 
     {
+
+        //Datos de conexión
+        private string mySqlServer = "localhost";
+        private string mySqlDatabase = "ProyectoGisell";
+        private string mySqlUserId = "root";
+        private string mySqlPassword = "";
+
+        // conexión global
+        private MySqlConnection conexion;
+
+        public Principal()
+        {
+            InitializeComponent();
+            ConectarBD(); 
+            
+            this.FormBorderStyle = FormBorderStyle.None;
+            flowLayoutPanel1.AutoScroll = true;
+            flowLayoutPanel1.BackColor = Color.FromArgb(40, 40, 40);
+        }
+
+       
+        private void ConectarBD()
+        {
+            try
+            {
+                string strConn = $"Server={mySqlServer};Database={mySqlDatabase};Uid={mySqlUserId};Pwd={mySqlPassword};";
+                conexion = new MySqlConnection(strConn);
+                conexion.Open();
+               
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show($"Error al conectar a MySQL: {ex.Message}",
+                                "Error de Conexión",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+        }
+
+       
+        private void DesconectarBD()
+        {
+            if (conexion != null && conexion.State == System.Data.ConnectionState.Open)
+            {
+                conexion.Close();
+                MessageBox.Show(" Conexión cerrada correctamente.",
+                                "Desconexión",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+            }
+        }
+        //para ejecutar comandos no borrar.... Julio 
+        
+        private void EjecutaComando(string ConsultaSQL)
+        {
+            try
+            {
+                if (conexion == null || conexion.State != System.Data.ConnectionState.Open)
+                    ConectarBD(); // reconecta si se cerró
+
+                using (MySqlCommand cmd = new MySqlCommand(ConsultaSQL, conexion))
+                {
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Comando ejecutado correctamente.",
+                                    "Éxito",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                }
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show($"Error de MySQL: {ex.Message}",
+                                "Error SQL",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error general: {ex.Message}",
+                                "Error del sistema",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+        }
+
+       
+        private void Principal_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DesconectarBD();
+        }
+    
+
+
+
+
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
@@ -28,16 +125,6 @@ namespace Login.fomrs
         {
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
-        }
-        public Principal()
-        {
-            InitializeComponent();
-            this.FormBorderStyle = FormBorderStyle.None;
-            flowLayoutPanel1.AutoScroll = true;
-            flowLayoutPanel1.BackColor = Color.FromArgb(40, 40, 40);
-
-
-
         }
        
 
