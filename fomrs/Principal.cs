@@ -21,9 +21,9 @@ namespace Login.fomrs
 
         //Datos de conexión
         private string mySqlServer = "localhost";
-        private string mySqlDatabase = "ProyectoGisell";
-        private string mySqlUserId = "root";
-        private string mySqlPassword = "";
+        private string mySqlDatabase = "proyectogisell";
+        private string mySqlUserId = "maestro";
+        private string mySqlPassword = "12345";
 
         // conexión global
         private MySqlConnection conexion;
@@ -36,6 +36,7 @@ namespace Login.fomrs
             this.FormBorderStyle = FormBorderStyle.None;
             flowLayoutPanel1.AutoScroll = true;
             flowLayoutPanel1.BackColor = Color.FromArgb(40, 40, 40);
+           agregar.Visible = false;
         }
 
        
@@ -158,6 +159,7 @@ namespace Login.fomrs
             {
                 flowLayoutPanel1.Controls.Add(t);
             }
+            agregar.Visible = true;
 
         }
 
@@ -165,10 +167,12 @@ namespace Login.fomrs
         {
             label1.Text = "Calificaciones";
             flowLayoutPanel1.Controls.Clear();
+            agregar.Visible = false;
         }
 
         private void btnalumnos_Click(object sender, EventArgs e)
         {
+            agregar.Visible=false;
             label1.Text = "Alumnos";
             flowLayoutPanel1.Controls.Clear();
             DataGridView alumnos = new DataGridView();
@@ -178,11 +182,13 @@ namespace Login.fomrs
             alumnos.Columns.Add("alumnos", "Alumnos");
             alumnos.Columns.Add("calificaciones", "Calificaciones");
         }
+       
 
         private void btnasistencias_Click(object sender, EventArgs e)
         {
             btnasistencias.BackColor = Color.FromArgb(25, 42, 86);
             label1.Text = "Asistencias";
+            agregar.Visible=false ;
             flowLayoutPanel1.Controls.Clear();
 
             DataGridView asistencias = new DataGridView();
@@ -192,6 +198,7 @@ namespace Login.fomrs
             asistencias.Columns.Add("alumnos", "Alumnos");
             asistencias.Columns.Add("asistencias", "Asistencias");
 
+            asistencias.DefaultCellStyle.BackColor = Color.LightBlue;
         }
 
         private void panel1_MouseDown(object sender, MouseEventArgs e)
@@ -248,7 +255,8 @@ namespace Login.fomrs
 
         }
         private int contador = 1;
-        private void button1_Click_1(object sender, EventArgs e)
+
+        private void agregar_Click(object sender, EventArgs e)
         {
             flowLayoutPanel1.Controls.Clear();
             foreach (var t in listaTarjetas)
@@ -257,6 +265,18 @@ namespace Login.fomrs
             }
             CrearMateria($"Materia {contador}");
             contador++;
+        }
+
+        private void roundedPictureBox1_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void btnPerfil_Click(object sender, EventArgs e)
+        {
+            detalle_usuario usuario = new detalle_usuario();
+            usuario.Show();
+            this.Hide();
         }
     }
 }

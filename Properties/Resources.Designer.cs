@@ -69,5 +69,25 @@ namespace Login.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WhatsApp_Image_2025_10_15_at_5_53_18_PM {
+            get {
+                object obj = ResourceManager.GetObject("WhatsApp Image 2025-10-15 at 5.53.18 PM", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WhatsApp_Image_2025_10_15_at_5_531 {
+            get {
+                object obj = ResourceManager.GetObject("WhatsApp Image 2025-10-15 at 5.531", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
