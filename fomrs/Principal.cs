@@ -274,7 +274,7 @@ namespace Login.fomrs
 
         private void btnPerfil_Click(object sender, EventArgs e)
         {
-            detalle_usuario usuario = new detalle_usuario();
+            detalle_usuario usuario = new detalle_usuario(this);
             usuario.Show();
             this.Hide();
         }

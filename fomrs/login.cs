@@ -103,7 +103,7 @@ namespace Login
         {
             Principal principal = new Principal();
             principal.Show();
-           this.Hide();
+            this.Hide();
            
         }
     }
