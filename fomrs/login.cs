@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Login.fomrs;
+using MySql.Data.MySqlClient;
 
 namespace Login
 {
     public partial class login : Form
     {
+
         //  para mover ventana
         [DllImport("user32.dll")]
         public static extern bool ReleaseCapture();
@@ -75,7 +77,7 @@ namespace Login
             if (txtusuario.Text == "")
             {
                 txtusuario.Text = "USUARIO";
-                txtusuario.ForeColor= Color.DimGray;
+                txtusuario.ForeColor = Color.DimGray;
             }
         }
 
@@ -84,7 +86,7 @@ namespace Login
             if (txtcontraseña.Text == "CONTRASEÑA")
             {
                 txtcontraseña.Text = "";
-                txtcontraseña.ForeColor= Color.DimGray;
+                txtcontraseña.ForeColor = Color.DimGray;
                 txtcontraseña.UseSystemPasswordChar = true;
             }
         }
@@ -95,16 +97,53 @@ namespace Login
             {
                 txtcontraseña.Text = "CONTRASEÑA";
                 txtcontraseña.ForeColor = Color.DimGray;
-                txtcontraseña.UseSystemPasswordChar= false;
+                txtcontraseña.UseSystemPasswordChar = false;
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Principal principal = new Principal();
-            principal.Show();
-            this.Hide();
-           
+            string usuario = txtusuario.Text.Trim();
+            string contraseña = txtcontraseña.Text.Trim();
+
+            string connectionString = "Server=localhost;Database=ProyectoGisell;Uid=root;Pwd=;";
+
+            using (MySqlConnection conexion = new MySqlConnection(connectionString))
+            {
+
+
+                try
+                {
+                    conexion.Open();
+
+                    string query = "SELECT COUNT(*) FROM Usuarios WHERE Nombre = @user AND Contrasena = @pass";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@user", usuario);
+                        cmd.Parameters.AddWithValue("@pass", contraseña);
+
+                        int resultado = Convert.ToInt32(cmd.ExecuteScalar());
+
+                        if (resultado > 0)
+                        {
+                            // Login correcto
+                            Principal principal = new Principal();
+                            principal.Show();
+                            this.Hide();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Usuario o contraseña incorrectos.", "Error de autenticación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+                catch (MySqlException ex)
+                {
+                    MessageBox.Show("Error al conectar con la base de datos: " + ex.Message);
+                }
+            }
         }
+        
     }
 }

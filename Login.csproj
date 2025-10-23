@@ -120,6 +120,12 @@
     <Compile Include="fomrs\login.Designer.cs">
       <DependentUpon>login.cs</DependentUpon>
     </Compile>
+    <Compile Include="fomrs\NuevaMateria.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fomrs\NuevaMateria.Designer.cs">
+      <DependentUpon>NuevaMateria.cs</DependentUpon>
+    </Compile>
     <Compile Include="fomrs\Principal.cs">
       <SubType>Form</SubType>
     </Compile>
