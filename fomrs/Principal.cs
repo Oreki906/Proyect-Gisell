@@ -110,10 +110,6 @@ namespace Login.fomrs
             DesconectarBD();
         }
 
-
-
-
-
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
@@ -160,7 +156,6 @@ namespace Login.fomrs
                 flowLayoutPanel1.Controls.Add(t);
             }
             agregar.Visible = true;
-
         }
 
         private void btncalificaciones_Click(object sender, EventArgs e)
@@ -227,10 +222,8 @@ namespace Login.fomrs
             }
         }
 
-
         private void btnasistencias_Click(object sender, EventArgs e)
         {
-            btnasistencias.BackColor = Color.FromArgb(25, 42, 86);
             label1.Text = "Asistencias";
             agregar.Visible = false;
             flowLayoutPanel1.Controls.Clear();
@@ -281,8 +274,6 @@ namespace Login.fomrs
                 // FormMateria form = new FormMateria(nombre); //((FormPrincipal)Application.OpenForms["FormPrincipal"]).AbrirFormulario(form);
                 MessageBox.Show($"Abrir formulario para materia: {nombre} (ID: {idMateria})");
             };
-            // Agregar controles a la tarjeta
-            tarjeta.Controls.Add(lbl);
             tarjeta.Controls.Add(btnAbrir);
 
             // Agregar controles a la lista de tarjetas
@@ -295,7 +286,6 @@ namespace Login.fomrs
             }
 
         }
-        private int contador = 1;
 
         private void agregar_Click(object sender, EventArgs e)
         {
