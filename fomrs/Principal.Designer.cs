@@ -33,6 +33,7 @@
             this.agregar = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btnPerfil = new System.Windows.Forms.Button();
             this.lblCorreo = new System.Windows.Forms.Label();
             this.lblNombre = new System.Windows.Forms.Label();
             this.roundedPictureBox1 = new Login.RoundedPictureBox();
@@ -41,7 +42,7 @@
             this.btnasistencias = new System.Windows.Forms.Button();
             this.btnmaterias = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.btnPerfil = new System.Windows.Forms.Button();
+            this.btnSalir = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.roundedPictureBox1)).BeginInit();
@@ -50,22 +51,24 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.panel1.Controls.Add(this.btnSalir);
             this.panel1.Controls.Add(this.agregar);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1632, 50);
+            this.panel1.Size = new System.Drawing.Size(1028, 41);
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             // 
             // agregar
             // 
-            this.agregar.Location = new System.Drawing.Point(350, 10);
+            this.agregar.Location = new System.Drawing.Point(262, 8);
+            this.agregar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.agregar.Name = "agregar";
-            this.agregar.Size = new System.Drawing.Size(102, 39);
+            this.agregar.Size = new System.Drawing.Size(76, 32);
             this.agregar.TabIndex = 1;
             this.agregar.Text = "button1";
             this.agregar.UseVisualStyleBackColor = true;
@@ -76,10 +79,9 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label1.Location = new System.Drawing.Point(733, 0);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(550, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(0, 54);
+            this.label1.Size = new System.Drawing.Size(0, 42);
             this.label1.TabIndex = 0;
             // 
             // panel2
@@ -94,28 +96,41 @@
             this.panel2.Controls.Add(this.btnasistencias);
             this.panel2.Controls.Add(this.btnmaterias);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel2.Location = new System.Drawing.Point(0, 50);
-            this.panel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panel2.Location = new System.Drawing.Point(0, 41);
+            this.panel2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(349, 807);
+            this.panel2.Size = new System.Drawing.Size(262, 568);
             this.panel2.TabIndex = 0;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint_1);
+            // 
+            // btnPerfil
+            // 
+            this.btnPerfil.Location = new System.Drawing.Point(41, 176);
+            this.btnPerfil.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnPerfil.Name = "btnPerfil";
+            this.btnPerfil.Size = new System.Drawing.Size(65, 18);
+            this.btnPerfil.TabIndex = 7;
+            this.btnPerfil.Text = "Ver Perfil";
+            this.btnPerfil.UseVisualStyleBackColor = true;
+            this.btnPerfil.Click += new System.EventHandler(this.btnPerfil_Click);
             // 
             // lblCorreo
             // 
             this.lblCorreo.AutoSize = true;
-            this.lblCorreo.Location = new System.Drawing.Point(204, 109);
+            this.lblCorreo.Location = new System.Drawing.Point(153, 89);
+            this.lblCorreo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCorreo.Name = "lblCorreo";
-            this.lblCorreo.Size = new System.Drawing.Size(48, 16);
+            this.lblCorreo.Size = new System.Drawing.Size(38, 13);
             this.lblCorreo.TabIndex = 6;
             this.lblCorreo.Text = "Correo";
             // 
             // lblNombre
             // 
             this.lblNombre.AutoSize = true;
-            this.lblNombre.Location = new System.Drawing.Point(203, 82);
+            this.lblNombre.Location = new System.Drawing.Point(152, 67);
+            this.lblNombre.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblNombre.Name = "lblNombre";
-            this.lblNombre.Size = new System.Drawing.Size(56, 16);
+            this.lblNombre.Size = new System.Drawing.Size(44, 13);
             this.lblNombre.TabIndex = 5;
             this.lblNombre.Text = "Nombre";
             // 
@@ -125,9 +140,10 @@
             this.roundedPictureBox1.BorderColor = System.Drawing.Color.White;
             this.roundedPictureBox1.BorderSize = 3;
             this.roundedPictureBox1.Image = global::Login.Properties.Resources.WhatsApp_Image_2025_10_15_at_5_531;
-            this.roundedPictureBox1.Location = new System.Drawing.Point(12, 25);
+            this.roundedPictureBox1.Location = new System.Drawing.Point(9, 20);
+            this.roundedPictureBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.roundedPictureBox1.Name = "roundedPictureBox1";
-            this.roundedPictureBox1.Size = new System.Drawing.Size(185, 185);
+            this.roundedPictureBox1.Size = new System.Drawing.Size(139, 139);
             this.roundedPictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.roundedPictureBox1.TabIndex = 4;
             this.roundedPictureBox1.TabStop = false;
@@ -139,10 +155,10 @@
             this.btncalificaciones.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btncalificaciones.Font = new System.Drawing.Font("Nirmala Text", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btncalificaciones.ForeColor = System.Drawing.Color.White;
-            this.btncalificaciones.Location = new System.Drawing.Point(0, 401);
-            this.btncalificaciones.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btncalificaciones.Location = new System.Drawing.Point(0, 326);
+            this.btncalificaciones.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btncalificaciones.Name = "btncalificaciones";
-            this.btncalificaciones.Size = new System.Drawing.Size(347, 52);
+            this.btncalificaciones.Size = new System.Drawing.Size(260, 42);
             this.btncalificaciones.TabIndex = 3;
             this.btncalificaciones.Text = "Calidicaciones";
             this.btncalificaciones.UseVisualStyleBackColor = false;
@@ -154,10 +170,10 @@
             this.btnalumnos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnalumnos.Font = new System.Drawing.Font("Nirmala Text", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnalumnos.ForeColor = System.Drawing.Color.White;
-            this.btnalumnos.Location = new System.Drawing.Point(0, 461);
-            this.btnalumnos.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnalumnos.Location = new System.Drawing.Point(0, 375);
+            this.btnalumnos.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnalumnos.Name = "btnalumnos";
-            this.btnalumnos.Size = new System.Drawing.Size(347, 52);
+            this.btnalumnos.Size = new System.Drawing.Size(260, 42);
             this.btnalumnos.TabIndex = 2;
             this.btnalumnos.Text = "Alumnos";
             this.btnalumnos.UseVisualStyleBackColor = false;
@@ -169,10 +185,10 @@
             this.btnasistencias.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnasistencias.Font = new System.Drawing.Font("Nirmala Text", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnasistencias.ForeColor = System.Drawing.Color.White;
-            this.btnasistencias.Location = new System.Drawing.Point(0, 518);
-            this.btnasistencias.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnasistencias.Location = new System.Drawing.Point(0, 421);
+            this.btnasistencias.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnasistencias.Name = "btnasistencias";
-            this.btnasistencias.Size = new System.Drawing.Size(347, 52);
+            this.btnasistencias.Size = new System.Drawing.Size(260, 42);
             this.btnasistencias.TabIndex = 1;
             this.btnasistencias.Text = "Asistencias ";
             this.btnasistencias.UseVisualStyleBackColor = false;
@@ -184,10 +200,10 @@
             this.btnmaterias.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnmaterias.Font = new System.Drawing.Font("Nirmala Text", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnmaterias.ForeColor = System.Drawing.Color.White;
-            this.btnmaterias.Location = new System.Drawing.Point(0, 344);
-            this.btnmaterias.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnmaterias.Location = new System.Drawing.Point(0, 280);
+            this.btnmaterias.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnmaterias.Name = "btnmaterias";
-            this.btnmaterias.Size = new System.Drawing.Size(347, 52);
+            this.btnmaterias.Size = new System.Drawing.Size(260, 42);
             this.btnmaterias.TabIndex = 0;
             this.btnmaterias.Text = "Materias";
             this.btnmaterias.UseVisualStyleBackColor = false;
@@ -197,33 +213,33 @@
             // 
             this.flowLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(26)))), ((int)(((byte)(26)))));
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(349, 50);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(262, 41);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(1283, 807);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(766, 568);
             this.flowLayoutPanel1.TabIndex = 1;
             // 
-            // btnPerfil
+            // btnSalir
             // 
-            this.btnPerfil.Location = new System.Drawing.Point(55, 216);
-            this.btnPerfil.Name = "btnPerfil";
-            this.btnPerfil.Size = new System.Drawing.Size(87, 22);
-            this.btnPerfil.TabIndex = 7;
-            this.btnPerfil.Text = "Ver Perfil";
-            this.btnPerfil.UseVisualStyleBackColor = true;
-            this.btnPerfil.Click += new System.EventHandler(this.btnPerfil_Click);
+            this.btnSalir.Location = new System.Drawing.Point(515, 8);
+            this.btnSalir.Name = "btnSalir";
+            this.btnSalir.Size = new System.Drawing.Size(75, 23);
+            this.btnSalir.TabIndex = 2;
+            this.btnSalir.Text = "Salir";
+            this.btnSalir.UseVisualStyleBackColor = true;
+            this.btnSalir.Click += new System.EventHandler(this.btnSalir_Click);
             // 
             // Principal
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1632, 857);
+            this.ClientSize = new System.Drawing.Size(1028, 609);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Principal";
             this.Text = "Principal";
             this.panel1.ResumeLayout(false);
@@ -250,5 +266,6 @@
         private System.Windows.Forms.Label lblCorreo;
         private System.Windows.Forms.Label lblNombre;
         private System.Windows.Forms.Button btnPerfil;
+        private System.Windows.Forms.Button btnSalir;
     }
 }

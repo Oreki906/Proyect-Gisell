@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,6 +12,9 @@ namespace Login.fomrs
 {
     public partial class detalle_usuario : Form
     {
+
+        private Form ventanaPrincipal;
+
         public detalle_usuario()
         {
             InitializeComponent();
@@ -41,6 +43,12 @@ namespace Login.fomrs
         private void label2_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnRegresar_Click(object sender, EventArgs e)
+        {
+            ventanaPrincipal.Show();
+            this.Close();
         }
     }
 }
