@@ -165,7 +165,49 @@ namespace Login.fomrs
             label1.Text = "Calificaciones";
             flowLayoutPanel1.Controls.Clear();
             agregar.Visible = false;
+
+            DataGridView dgv = new DataGridView
+            {
+                Dock = DockStyle.Fill,
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                ReadOnly = true,
+                AllowUserToAddRows = false,
+                SelectionMode = DataGridViewSelectionMode.FullRowSelect
+            };
+            flowLayoutPanel1.Controls.Add(dgv);
+
+            try
+            {
+                if (conexion == null || conexion.State != ConnectionState.Open)
+                    ConectarBD();
+
+                string consulta = @"
+            SELECT 
+                a.id_Alumno,
+                CONCAT(a.Nombre,' ',a.Apellido) AS Alumno,
+                IFNULL(c.Calificacion, 'Sin calificación') AS Nota
+            FROM Alumnos a
+            LEFT JOIN Calificacion c ON a.id_Alumno = c.id_Alumno
+            ORDER BY a.Nombre;
+        ";
+
+                using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
+                using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    dgv.DataSource = dt;
+                }
+
+                if (dgv.Columns.Contains("id_Alumno"))
+                    dgv.Columns["id_Alumno"].Visible = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar calificaciones: " + ex.Message);
+            }
         }
+
 
         private void btnalumnos_Click(object sender, EventArgs e)
         {
@@ -254,21 +296,24 @@ namespace Login.fomrs
                 };
                 contenedor.Controls.Add(asistencias);
                 // Cargar datos
-                string consulta = "SELECT Nombre, Apellido, Matricula, Grado FROM Alumnos";
+                string consulta = "SELECT id_Alumno, Nombre, Apellido, Matricula, Grado FROM Alumnos";
                 using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
                 using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
                     asistencias.DataSource = dt;
-                    // Columna de estado de asistencia
+                    if (asistencias.Columns.Contains("id_Alumno"))
+                        asistencias.Columns["id_Alumno"].Visible = false;
+
                     DataGridViewComboBoxColumn comboCol = new DataGridViewComboBoxColumn
                     {
                         HeaderText = "Asistencia",
                         Name = "EstadoAsistencia",
                         DataSource = new string[] { "Presente", "Ausente", "Retardo" }
                     };
-                    asistencias.Columns.Add(comboCol);
+                    if (!asistencias.Columns.Contains("EstadoAsistencia"))
+                        asistencias.Columns.Add(comboCol);
                 }
                 // Botón Guardar
                 Button btnGuardar = new Button
@@ -298,11 +343,24 @@ namespace Login.fomrs
                 if (conexion == null || conexion.State != ConnectionState.Open)
                     ConectarBD();
 
+                if (!dgv.Columns.Contains("id_Alumno"))
+                {
+                    MessageBox.Show("La tabla no tiene la columna id_Alumno. No se puede guardar asistencias.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 foreach (DataGridViewRow row in dgv.Rows)
                 {
+                    if (row.IsNewRow) continue;
+                    if (!dgv.Columns.Contains("EstadoAsistencia")) continue;
                     if (row.Cells["EstadoAsistencia"].Value == null) continue;
 
-                    int idAlumno = Convert.ToInt32(row.Cells["id_Alumno"].Value);
+                    object idObj = row.Cells["id_Alumno"].Value;
+                    if (idObj == null || idObj == DBNull.Value) continue;
+
+                    int idAlumno;
+                    if (!int.TryParse(idObj.ToString(), out idAlumno)) continue;
+
                     string estado = row.Cells["EstadoAsistencia"].Value.ToString();
 
                     // Procedimiento

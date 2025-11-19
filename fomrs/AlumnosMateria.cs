@@ -273,32 +273,34 @@ namespace Login.fomrs
             int idAlumno = Convert.ToInt32(dgv.SelectedRows[0].Cells["id_Alumno"].Value);
 
             // Carga la calificación existente 
-            object o = ConexionBD.EjecutarScalar("SELECT id_Calificacion, Calificacion FROM Calificacion WHERE id_Alumno=@id AND id_Materia=@m LIMIT 1",
-                ("@id", idAlumno), ("@m", idMateria));
-
-            int idCal = 0;
-            int calActual = 0;
-            if (o != null && o != DBNull.Value)
+            using (MySqlCommand cmdCheck = new MySqlCommand("SELECT id_Calificacion, Calificacion FROM Calificacion WHERE id_Alumno=@id AND id_Materia=@m LIMIT 1", ConexionBD.conexion))
             {
-                // si el select devuelve solo la calificacion, hace un reader para más seguridad
-                using (MySqlCommand cmd = new MySqlCommand("SELECT id_Calificacion, Calificacion FROM Calificacion WHERE id_Alumno=@id AND id_Materia=@m LIMIT 1", ConexionBD.conexion))
+                cmdCheck.Parameters.AddWithValue("@id", idAlumno);
+                cmdCheck.Parameters.AddWithValue("@m", idMateria);
+                using (var r = cmdCheck.ExecuteReader())
                 {
-                    cmd.Parameters.AddWithValue("@id", idAlumno);
-                    cmd.Parameters.AddWithValue("@m", idMateria);
-                    using (var r = cmd.ExecuteReader())
+                    if (!r.Read())
                     {
-                        if (r.Read())
-                        {
-                            idCal = r.GetInt32("id_Calificacion");
-                            calActual = r.GetInt32("Calificacion");
-                        }
+                        MessageBox.Show("No existe una calificación previa para este alumno en esta materia.");
+                        return;
                     }
                 }
             }
-            else
+
+            int idCal = 0;
+            int calActual = 0;
+            using (MySqlCommand cmd = new MySqlCommand("SELECT id_Calificacion, Calificacion FROM Calificacion WHERE id_Alumno=@id AND id_Materia=@m LIMIT 1", ConexionBD.conexion))
             {
-                MessageBox.Show("No existe una calificación previa para este alumno en esta materia.");
-                return;
+                cmd.Parameters.AddWithValue("@id", idAlumno);
+                cmd.Parameters.AddWithValue("@m", idMateria);
+                using (var r = cmd.ExecuteReader())
+                {
+                    if (r.Read())
+                    {
+                        idCal = r.GetInt32("id_Calificacion");
+                        calActual = r.GetInt32("Calificacion");
+                    }
+                }
             }
 
             Form f = new Form
@@ -322,8 +324,14 @@ namespace Login.fomrs
                         ("p_nuevaCalificacion", (int)numCal.Value)
                     );
 
-                    MessageBox.Show("Calificación actualizada.");
+                    // Recalcula el promedio del alumno.
+                    decimal nuevoProm = ConexionBD.EjecutarFuncionDecimal("SELECT funPromedioAlumno(@p_idAlumno)", ("@p_idAlumno", idAlumno));
+                    ConexionBD.EjecutarNonQuery("UPDATE Alumnos SET Promedio=@p WHERE id_Alumno=@id", ("@p", nuevoProm), ("@id", idAlumno));
+
+                    // Recarga la vista
                     CargarAlumnosMateria(idMateria, dgv);
+
+                    MessageBox.Show("Calificación actualizada.");
                 }
                 catch (Exception ex)
                 {
