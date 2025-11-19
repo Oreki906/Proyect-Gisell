@@ -26,21 +26,24 @@ namespace Login.fomrs
         private string mySqlPassword = "";
 
         // conexión global
-        private MySqlConnection conexion;
+        public MySqlConnection conexion;
 
-        public Principal()
+        public Principal(int idUsuario = 0)
         {
             InitializeComponent();
             ConectarBD();
-
+            
             this.FormBorderStyle = FormBorderStyle.None;
             flowLayoutPanel1.AutoScroll = true;
             flowLayoutPanel1.BackColor = Color.FromArgb(40, 40, 40);
             agregar.Visible = false;
+
+            idUsuarioActual = idUsuario;
+            CargarDatosUsuario();
         }
 
 
-        private void ConectarBD()
+        public void ConectarBD()
         {
             try
             {
@@ -57,9 +60,7 @@ namespace Login.fomrs
                                 MessageBoxIcon.Error);
             }
         }
-
-
-        private void DesconectarBD()
+        public void DesconectarBD()
         {
             if (conexion != null && conexion.State == System.Data.ConnectionState.Open)
             {
@@ -117,7 +118,7 @@ namespace Login.fomrs
 
         // En esta lista guardamos las tarjetas que corresponden a las materias.
         private List<Panel> listaTarjetas = new List<Panel>();
-
+        
         private void panelTitle_MouseDown(object sender, MouseEventArgs e)
         {
             ReleaseCapture();
@@ -149,6 +150,7 @@ namespace Login.fomrs
 
         private void button1_Click(object sender, EventArgs e)
         {
+            CargarMaterias();
             label1.Text = "Materias";
             flowLayoutPanel1.Controls.Clear();
             foreach (var t in listaTarjetas)
@@ -228,14 +230,94 @@ namespace Login.fomrs
             agregar.Visible = false;
             flowLayoutPanel1.Controls.Clear();
 
-            DataGridView asistencias = new DataGridView();
-            flowLayoutPanel1.Controls.Add(asistencias);
-            asistencias.Size = flowLayoutPanel1.Size;
-            asistencias.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            asistencias.Columns.Add("alumnos", "Alumnos");
-            asistencias.Columns.Add("asistencias", "Asistencias");
+            try
+            {
+                if (conexion == null || conexion.State != ConnectionState.Open)
+                    ConectarBD();
+                // Panel contenedor
+                Panel contenedor = new Panel
+                {
+                    Width = flowLayoutPanel1.Width - 20,
+                    Height = flowLayoutPanel1.Height - 20,
+                    BackColor = Color.FromArgb(50, 50, 50),
+                    AutoScroll = true
+                };
+                // DataGridView
+                DataGridView asistencias = new DataGridView
+                {
+                    Dock = DockStyle.Top,
+                    Height = contenedor.Height - 50,
+                    AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                    AllowUserToAddRows = false,
+                    ReadOnly = false,
+                    SelectionMode = DataGridViewSelectionMode.FullRowSelect
+                };
+                contenedor.Controls.Add(asistencias);
+                // Cargar datos
+                string consulta = "SELECT Nombre, Apellido, Matricula, Grado FROM Alumnos";
+                using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
+                using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    asistencias.DataSource = dt;
+                    // Columna de estado de asistencia
+                    DataGridViewComboBoxColumn comboCol = new DataGridViewComboBoxColumn
+                    {
+                        HeaderText = "Asistencia",
+                        Name = "EstadoAsistencia",
+                        DataSource = new string[] { "Presente", "Ausente", "Retardo" }
+                    };
+                    asistencias.Columns.Add(comboCol);
+                }
+                // Botón Guardar
+                Button btnGuardar = new Button
+                {
+                    Text = "Guardar Asistencias",
+                    Height = 40,
+                    Dock = DockStyle.Bottom,
+                    BackColor = Color.MediumSeaGreen,
+                    ForeColor = Color.White,
+                    FlatStyle = FlatStyle.Flat
+                };
+                btnGuardar.Click += (s, ev) => GuardarAsistencias(asistencias);
+                contenedor.Controls.Add(btnGuardar);
+                // Agregar contenedor al FlowLayoutPanel
+                flowLayoutPanel1.Controls.Add(contenedor);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar asistencias: " + ex.Message);
+            }
+        }
 
-            asistencias.DefaultCellStyle.BackColor = Color.LightBlue;
+        private void GuardarAsistencias(DataGridView dgv)
+        {
+            try
+            {
+                if (conexion == null || conexion.State != ConnectionState.Open)
+                    ConectarBD();
+
+                foreach (DataGridViewRow row in dgv.Rows)
+                {
+                    if (row.Cells["EstadoAsistencia"].Value == null) continue;
+
+                    int idAlumno = Convert.ToInt32(row.Cells["id_Alumno"].Value);
+                    string estado = row.Cells["EstadoAsistencia"].Value.ToString();
+
+                    // Procedimiento
+                    ConexionBD.EjecutarProcedimiento("proRegistrarAsistencia",
+                        ("p_idAlumno", idAlumno),
+                        ("p_estado", estado)
+                    );
+                }
+
+                MessageBox.Show("Asistencias guardadas correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al guardar asistencias: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void panel1_MouseDown(object sender, MouseEventArgs e)
@@ -248,47 +330,152 @@ namespace Login.fomrs
             // Panel contenedor
             Panel tarjeta = new Panel();
             tarjeta.Width = 250;
-            tarjeta.Height = 100;
+            tarjeta.Height = 140;
             tarjeta.Margin = new Padding(10);
             tarjeta.BackColor = Color.FromArgb(20, 25, 60);
             tarjeta.BorderStyle = BorderStyle.FixedSingle;
             tarjeta.Padding = new Padding(5);
-            // Etiqueta con el nombre
-            Label lbl = new Label();
-            lbl.Text = nombre;
-            lbl.ForeColor = Color.White;
-            lbl.Font = new Font("Segoe UI", 12, FontStyle.Bold);
-            lbl.Dock = DockStyle.Top;
-            lbl.TextAlign = ContentAlignment.MiddleCenter;
-            // Botón para abrir el formulario de la materia
-            Button btnAbrir = new Button();
-            btnAbrir.Text = "Abrir";
-            btnAbrir.Dock = DockStyle.Bottom;
-            btnAbrir.Height = 30;
-            btnAbrir.FlatStyle = FlatStyle.Flat;
-            btnAbrir.ForeColor = Color.White;
-            btnAbrir.BackColor = Color.FromArgb(40, 60, 120);
 
+            // Etiqueta con el nombre
+            Label lbl = new Label
+            {
+                Text = nombre,
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                Dock = DockStyle.Top,
+                TextAlign = ContentAlignment.MiddleCenter
+            };
+            tarjeta.Controls.Add(lbl);
+
+            // Botón Abrir
+            Button btnAbrir = new Button
+            {
+                Text = "Abrir",
+                Dock = DockStyle.Bottom,
+                Height = 30,
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(40, 60, 120),
+                ForeColor = Color.White
+            };
             btnAbrir.Click += (s, e) =>
             {
-                // FormMateria form = new FormMateria(nombre); //((FormPrincipal)Application.OpenForms["FormPrincipal"]).AbrirFormulario(form);
-                MessageBox.Show($"Abrir formulario para materia: {nombre} (ID: {idMateria})");
+                AlumnosMateria alumnosMateria = new AlumnosMateria(idMateria, nombre);
+                alumnosMateria.Show();
+
             };
             tarjeta.Controls.Add(btnAbrir);
-
-            // Agregar controles a la lista de tarjetas
-            listaTarjetas.Add(tarjeta);
-
-            // Agregar tarjetas al FlowLayoutPanel
-            foreach (var t in listaTarjetas)
+            // Botón Editar
+            Button btnEditar = new Button
             {
-                flowLayoutPanel1.Controls.Add(tarjeta);
+                Text = "Editar",
+                Dock = DockStyle.Bottom,
+                Height = 30,
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.MediumSlateBlue,
+                ForeColor = Color.White
+            };
+            btnEditar.Click += (s, e) => EditarMateria(idMateria, nombre);
+            tarjeta.Controls.Add(btnEditar);
+
+            // Botón Borrar
+            Button btnBorrar = new Button
+            {
+                Text = "Borrar",
+                Dock = DockStyle.Bottom,
+                Height = 30,
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.IndianRed,
+                ForeColor = Color.White
+            };
+            btnBorrar.Click += (s, e) => BorrarMateria(idMateria);
+            tarjeta.Controls.Add(btnBorrar);
+
+            // Estadísticas: promedio materia y total materias del usuario
+            Button btnStats = new Button
+            {
+                Text = "Estadísticas",
+                Dock = DockStyle.Bottom,
+                Height = 30,
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.DarkSlateGray,
+                ForeColor = Color.White
+            };
+            btnStats.Click += (s, e) =>
+            {//Aquí uso la conexion del archivo conexion.cs, ya que ahí tengo los métodos para ejecutar funciones y procedimientos, y separar las cosas de la BD.
+                try
+                {
+                    ConexionBD.Conectar();
+                    decimal prom = ConexionBD.EjecutarFuncionDecimal("SELECT funPromedioMateria(@p_idMateria)", ("@p_idMateria", idMateria));
+                    int total = ConexionBD.EjecutarFuncionInt("SELECT funTotalMateriasUsuario(@p_idUsuario)", ("@p_idUsuario", idUsuarioActual));
+                    MessageBox.Show($"Promedio materia: {prom:F2}\nTotal materias (usuario): {total}");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al obtener estadísticas: " + ex.Message);
+                }
+            };
+            tarjeta.Controls.Add(btnStats);
+
+            // Agregar a la lista de tarjetas
+            listaTarjetas.Add(tarjeta);
+            // Agregar tarjetas al FlowLayoutPanel
+            flowLayoutPanel1.Controls.Add(tarjeta);
+        }
+        private int contador = 1;
+
+        private void EditarMateria(int idMateria, string nombreActual)
+        {
+            int cantidadActual = 0;
+            string queryCantidad = "SELECT Cantidad_Alumnos FROM Materias WHERE id_Materia=@id";
+            using (MySqlCommand cmd = new MySqlCommand(queryCantidad, conexion))
+            {
+                cmd.Parameters.AddWithValue("@id", idMateria);
+                object result = cmd.ExecuteScalar();
+                if (result != null) cantidadActual = Convert.ToInt32(result);
             }
 
+            using (var formEditar = new NuevaMateria(nombreActual, cantidadActual))
+            {
+                var resultado = formEditar.ShowDialog();
+                if (resultado == DialogResult.OK)
+                {
+                    string nuevoNombre = formEditar.NombreMateria;
+                    int nuevaCantidad = formEditar.CantidadAlumnos;
+
+                    string queryUpdate = "UPDATE Materias SET Nombre_Materia=@nombre, Cantidad_Alumnos=@cantidad WHERE id_Materia=@id";
+                    using (MySqlCommand cmd = new MySqlCommand(queryUpdate, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nombre", nuevoNombre);
+                        cmd.Parameters.AddWithValue("@cantidad", nuevaCantidad);
+                        cmd.Parameters.AddWithValue("@id", idMateria);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    MessageBox.Show("Materia editada correctamente.");
+                    CargarMaterias();
+                }
+            }
+        }
+        private void BorrarMateria(int idMateria)
+        {
+            var confirm = MessageBox.Show("¿Seguro que quieres borrar esta materia?", "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (confirm == DialogResult.Yes)
+            {
+                string query = "DELETE FROM Materias WHERE id_Materia=@id";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@id", idMateria);
+                    cmd.ExecuteNonQuery();
+                }
+
+                MessageBox.Show("Materia eliminada correctamente.");
+                CargarMaterias();
+            }
         }
 
         private void agregar_Click(object sender, EventArgs e)
         {
+            flowLayoutPanel1.BackColor= Color.LightBlue;
             flowLayoutPanel1.Controls.Clear();
             listaTarjetas.Clear();
 
@@ -301,23 +488,19 @@ namespace Login.fomrs
                     string nombreMateria = nuevaMateria.NombreMateria;
                     int cantidadAlumnos = nuevaMateria.CantidadAlumnos;
 
-                    int idUsuario = 1;
+                    int idUsuario = idUsuarioActual == 0 ? 1 : idUsuarioActual;
 
                     string insertQuery = "INSERT INTO Materias (Nombre_Materia, Cantidad_Alumnos, id_Usuario) VALUES (@nombre, @cantidad, @idUsuario)";
                     try
                     {
-                        if (conexion == null || conexion.State != ConnectionState.Open)
-                            ConectarBD();
+                        // Llamada al procedimiento proAgregarMateria (cantidad inicial 0; trigger o SP puede ajustarla si se desea)
+                        ConexionBD.EjecutarProcedimiento("proAgregarMateria",
+                            ("p_nombre", nombreMateria),
+                            ("p_idUsuario", idUsuario)
+                        );
 
-                        using (MySqlCommand cmd = new MySqlCommand(insertQuery, conexion))
-                        {
-                            cmd.Parameters.AddWithValue("@nombre", nombreMateria);
-                            cmd.Parameters.AddWithValue("@cantidad", cantidadAlumnos);
-                            cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
-                            cmd.ExecuteNonQuery();
-                        }
                         MessageBox.Show("Materia creada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        // Recargar materias desde la base para actualizar la vista
+                        //Recaraga las materias
                         CargarMaterias();
                     }
                     catch (Exception ex)
@@ -327,7 +510,8 @@ namespace Login.fomrs
                 }
                 else
                 {
-                    // Usuario canceló, no hacer nada
+                    // Usuario canceló, no hace nada
+                    CargarMaterias();
                 }
             }
         }
@@ -337,7 +521,6 @@ namespace Login.fomrs
             flowLayoutPanel1.Controls.Clear();
 
             string consulta = "SELECT id_Materia, Nombre_Materia FROM Materias";
-
             try
             {
                 if (conexion == null || conexion.State != ConnectionState.Open)
@@ -359,7 +542,7 @@ namespace Login.fomrs
                 MessageBox.Show("Error al cargar materias: " + ex.Message);
             }
         }
-
+        
         private void roundedPictureBox1_Click(object sender, EventArgs e)
         {
 
@@ -377,5 +560,49 @@ namespace Login.fomrs
             DesconectarBD();
             Application.Exit();
         }
+
+        private void lblNombre_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblCorreo_Click(object sender, EventArgs e)
+        {
+
+        }
+        private int idUsuarioActual;
+
+        private void CargarDatosUsuario()
+        {
+            try
+            {
+                if (conexion == null || conexion.State != ConnectionState.Open)
+                    ConectarBD();
+
+                string query = "SELECT Nombre, Correo FROM Usuarios WHERE id_Usuario = @id";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@id", idUsuarioActual);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            lblNombre.Text = reader.GetString("Nombre");
+                            lblCorreo.Text = reader.GetString("Correo");
+                        }
+                        else
+                        {
+                            lblNombre.Text = "Desconocido";
+                            lblCorreo.Text = "-";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar datos del usuario: " + ex.Message);
+            }
+        }
+
     }
 }

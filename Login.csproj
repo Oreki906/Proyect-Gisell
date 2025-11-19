@@ -108,6 +108,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="conexion.cs" />
+    <Compile Include="fomrs\AlumnosMateria.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fomrs\AlumnosMateria.Designer.cs">
+      <DependentUpon>AlumnosMateria.cs</DependentUpon>
+    </Compile>
     <Compile Include="fomrs\detalle usuario.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,6 +143,9 @@
     <Compile Include="RoundedPictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <EmbeddedResource Include="fomrs\AlumnosMateria.resx">
+      <DependentUpon>AlumnosMateria.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="fomrs\detalle usuario.resx">
       <DependentUpon>detalle usuario.cs</DependentUpon>
     </EmbeddedResource>

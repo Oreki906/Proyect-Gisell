@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace Login.fomrs
 {
@@ -14,10 +15,26 @@ namespace Login.fomrs
     {
         public string NombreMateria { get; private set; }
         public int CantidadAlumnos { get; private set; }
+
+        private TextBox txtNombre;
+        private NumericUpDown numCantidad;
+
+        // Constructor para crear
         public NuevaMateria()
         {
             InitializeComponent();
+            ConfigurarForm();
+        }
 
+        // Constructor para editar 
+        public NuevaMateria(string nombreExistente, int cantidadExistente) : this()
+        {
+            txtNombre.Text = nombreExistente;
+            numCantidad.Value = cantidadExistente;
+        }
+
+        private void ConfigurarForm()
+        {
             this.Text = "Nueva Materia";
             this.Size = new Size(300, 180);
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -26,10 +43,10 @@ namespace Login.fomrs
             this.MinimizeBox = false;
 
             Label lblNombre = new Label() { Text = "Nombre:", Location = new Point(10, 20), AutoSize = true };
-            TextBox txtNombre = new TextBox() { Location = new Point(80, 18), Width = 180 };
+            txtNombre = new TextBox() { Location = new Point(80, 18), Width = 180 };
 
             Label lblCantidad = new Label() { Text = "Cantidad Alumnos:", Location = new Point(10, 60), AutoSize = true };
-            NumericUpDown numCantidad = new NumericUpDown() { Location = new Point(130, 58), Width = 130, Minimum = 0, Maximum = 1000 };
+            numCantidad = new NumericUpDown() { Location = new Point(130, 58), Width = 130, Minimum = 0, Maximum = 1000 };
 
             Button btnAceptar = new Button() { Text = "Aceptar", Location = new Point(60, 100), DialogResult = DialogResult.OK };
             Button btnCancelar = new Button() { Text = "Cancelar", Location = new Point(160, 100), DialogResult = DialogResult.Cancel };
@@ -49,21 +66,14 @@ namespace Login.fomrs
                 if (string.IsNullOrWhiteSpace(txtNombre.Text))
                 {
                     MessageBox.Show("El nombre no puede estar vacío.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    this.DialogResult = DialogResult.None; // evita cerrar el formulario
+                    this.DialogResult = DialogResult.None;
                     return;
                 }
 
                 NombreMateria = txtNombre.Text.Trim();
                 CantidadAlumnos = (int)numCantidad.Value;
-                this.DialogResult = DialogResult.OK;
-                this.Close();
             };
+        }
+    }
 
-            btnCancelar.Click += (s, e) =>
-            {
-                this.DialogResult = DialogResult.Cancel;
-                this.Close();
-            };
-    }
-    }
 }

@@ -110,25 +110,25 @@ namespace Login
 
             using (MySqlConnection conexion = new MySqlConnection(connectionString))
             {
-
-
                 try
                 {
                     conexion.Open();
 
-                    string query = "SELECT COUNT(*) FROM Usuarios WHERE Nombre = @user AND Contrasena = @pass";
+                    string query = "SELECT id_Usuario FROM Usuarios WHERE Nombre = @user AND Contrasena = @pass";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
                         cmd.Parameters.AddWithValue("@user", usuario);
                         cmd.Parameters.AddWithValue("@pass", contraseña);
 
-                        int resultado = Convert.ToInt32(cmd.ExecuteScalar());
+                        object resultado = cmd.ExecuteScalar();
 
-                        if (resultado > 0)
+                        if (resultado != null)
                         {
-                            // Login correcto
-                            Principal principal = new Principal();
+                            int idUsuario = Convert.ToInt32(resultado);
+
+                            // Pasamos el ID al formulario principal
+                            Principal principal = new Principal(idUsuario);
                             principal.Show();
                             this.Hide();
                         }
