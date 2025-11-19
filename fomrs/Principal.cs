@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
+
 namespace Login.fomrs
 {
     public partial class Principal : Form
@@ -27,6 +28,8 @@ namespace Login.fomrs
 
         // conexión global
         private MySqlConnection conexion;
+
+        private Agenda agenda;
 
         public Principal()
         {
@@ -415,6 +418,20 @@ namespace Login.fomrs
         private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void btnAgenda_Click(object sender, EventArgs e)
+        {
+            if (agenda == null || agenda.IsDisposed)
+            {
+                agenda = new Agenda(this, conexion);
+                agenda.Show();
+            }
+            else
+            {
+                agenda.BringToFront();
+                agenda.Focus();
+            }
         }
     }
 }
