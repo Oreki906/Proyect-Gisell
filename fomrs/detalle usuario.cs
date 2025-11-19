@@ -21,19 +21,12 @@ namespace Login.fomrs
         }
 
 
-        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
-        private extern static void ReleaseCapture();
-        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
-        private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
+        
         private void detalle_usuario_Load(object sender, EventArgs e)
         {
             this.FormBorderStyle = FormBorderStyle.None;
         }
-        private void panelTitle_MouseDown(object sender, MouseEventArgs e)
-        {
-            ReleaseCapture();
-            SendMessage(this.Handle, 0x112, 0xf012, 0);
-        }
+       
 
         private void label1_Click(object sender, EventArgs e)
         {
@@ -47,7 +40,8 @@ namespace Login.fomrs
 
         private void btnRegresar_Click(object sender, EventArgs e)
         {
-            ventanaPrincipal.Show();
+            Principal principal = new Principal();
+            principal.Show();
             this.Close();
         }
     }

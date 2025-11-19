@@ -18,12 +18,12 @@ namespace Login.fomrs
     public partial class Principal : Form
 
     {
-
+        
         //Datos de conexión
         private string mySqlServer = "localhost";
-        private string mySqlDatabase = "ProyectoGisell";
-        private string mySqlUserId = "root";
-        private string mySqlPassword = "";
+        private string mySqlDatabase = "proyectogisell";
+        private string mySqlUserId = "maestro";
+        private string mySqlPassword = "12345";
 
         // conexión global
         private MySqlConnection conexion;
@@ -31,16 +31,27 @@ namespace Login.fomrs
         public Principal()
         {
             InitializeComponent();
-            ConectarBD();
+            
 
             this.FormBorderStyle = FormBorderStyle.None;
             flowLayoutPanel1.AutoScroll = true;
             flowLayoutPanel1.BackColor = Color.FromArgb(40, 40, 40);
             agregar.Visible = false;
+            //panel1.BackColor = Color.FromArgb(0, 41, 204);
+            //panel2.BackColor = Color.FromArgb(0, 31, 153);
+            panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+
+
+
+
+            
+
+
         }
 
 
-        private void ConectarBD()
+       private void ConectarBD()
         {
             try
             {
@@ -71,7 +82,7 @@ namespace Login.fomrs
             }
         }
         //para ejecutar comandos no borrar.... Julio 
-
+        
         private void EjecutaComando(string ConsultaSQL)
         {
             try
@@ -132,7 +143,7 @@ namespace Login.fomrs
 
         private void panel2_Paint_1(object sender, PaintEventArgs e)
         {
-            panel2.BackColor = Color.FromArgb(25, 42, 86);
+           panel2.BackColor = Color.FromArgb(25, 42, 86);
             btncalificaciones.BackColor = Color.FromArgb(25, 42, 86);
             btncalificaciones.FlatAppearance.BorderSize = 0;
             btnalumnos.BackColor = Color.FromArgb(25, 42, 86);
@@ -160,6 +171,7 @@ namespace Login.fomrs
                 flowLayoutPanel1.Controls.Add(t);
             }
             agregar.Visible = true;
+            CargarMaterias();
 
         }
 
@@ -248,7 +260,7 @@ namespace Login.fomrs
         private void panel1_MouseDown(object sender, MouseEventArgs e)
         {
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTitle_MouseDown);
-            btnSalir.BackColor = Color.LightCyan;
+          
         }
         private void CrearMateria(string nombre, int idMateria)
         {
@@ -278,8 +290,18 @@ namespace Login.fomrs
 
             btnAbrir.Click += (s, e) =>
             {
-                // FormMateria form = new FormMateria(nombre); //((FormPrincipal)Application.OpenForms["FormPrincipal"]).AbrirFormulario(form);
-                MessageBox.Show($"Abrir formulario para materia: {nombre} (ID: {idMateria})");
+                if (conexion == null || conexion.State != ConnectionState.Open)
+                    ConectarBD();
+
+               listaplaneaciones lista = new listaplaneaciones(idMateria, nombre, conexion);
+                lista.TopLevel = false;
+                lista.Dock = DockStyle.Fill;
+
+                flowLayoutPanel1.Controls.Clear();
+                flowLayoutPanel1.Controls.Add(lista);
+                lista.Show();
+                
+
             };
             // Agregar controles a la tarjeta
             tarjeta.Controls.Add(lbl);
@@ -382,10 +404,17 @@ namespace Login.fomrs
             this.Hide();
         }
 
-        private void btnSalir_Click(object sender, EventArgs e)
+        
+
+        private void button1_Click_1(object sender, EventArgs e)
         {
-            DesconectarBD();
             Application.Exit();
+            DesconectarBD();
+        }
+
+        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

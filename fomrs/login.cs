@@ -103,10 +103,10 @@ namespace Login
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string usuario = txtusuario.Text.Trim();
+             string usuario = txtusuario.Text.Trim();
             string contraseña = txtcontraseña.Text.Trim();
 
-            string connectionString = "Server=localhost;Database=ProyectoGisell;Uid=root;Pwd=;";
+            string connectionString = "Server=localhost;Database=proyectogisell;Uid=maestro;Pwd=12345;";
 
             using (MySqlConnection conexion = new MySqlConnection(connectionString))
             {
@@ -142,7 +142,11 @@ namespace Login
                 {
                     MessageBox.Show("Error al conectar con la base de datos: " + ex.Message);
                 }
-            }
+            } 
+
+            //Principal principal = new Principal();
+           // principal.Show();
+            //this.Hide();
         }
         
     }

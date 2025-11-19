@@ -114,17 +114,30 @@
     <Compile Include="fomrs\detalle usuario.Designer.cs">
       <DependentUpon>detalle usuario.cs</DependentUpon>
     </Compile>
+    <Compile Include="fomrs\listaplaneaciones.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fomrs\listaplaneaciones.Designer.cs">
+      <DependentUpon>listaplaneaciones.cs</DependentUpon>
+    </Compile>
     <Compile Include="fomrs\login.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="fomrs\login.Designer.cs">
       <DependentUpon>login.cs</DependentUpon>
     </Compile>
+    <Compile Include="fomrs\Modelos.cs" />
     <Compile Include="fomrs\NuevaMateria.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="fomrs\NuevaMateria.Designer.cs">
       <DependentUpon>NuevaMateria.cs</DependentUpon>
+    </Compile>
+    <Compile Include="fomrs\Planeacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fomrs\Planeacion.Designer.cs">
+      <DependentUpon>Planeacion.cs</DependentUpon>
     </Compile>
     <Compile Include="fomrs\Principal.cs">
       <SubType>Form</SubType>
@@ -140,8 +153,14 @@
     <EmbeddedResource Include="fomrs\detalle usuario.resx">
       <DependentUpon>detalle usuario.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="fomrs\listaplaneaciones.resx">
+      <DependentUpon>listaplaneaciones.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="fomrs\login.resx">
       <DependentUpon>login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="fomrs\Planeacion.resx">
+      <DependentUpon>Planeacion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="fomrs\Principal.resx">
       <DependentUpon>Principal.cs</DependentUpon>
