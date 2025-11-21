@@ -33,7 +33,11 @@
             this.btnNueva = new System.Windows.Forms.Button();
             this.btnVer = new System.Windows.Forms.Button();
             this.btnbtnExporatrPDF = new System.Windows.Forms.Button();
+            this.dgvUnidades = new System.Windows.Forms.DataGridView();
+            this.btnGuardarUnidades = new System.Windows.Forms.Button();
+            this.btnAgregarAlumno = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPlaneaciones)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvUnidades)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTitulo
@@ -49,16 +53,16 @@
             // dgvPlaneaciones
             // 
             this.dgvPlaneaciones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvPlaneaciones.Location = new System.Drawing.Point(6, 95);
+            this.dgvPlaneaciones.Location = new System.Drawing.Point(14, 455);
             this.dgvPlaneaciones.Name = "dgvPlaneaciones";
             this.dgvPlaneaciones.RowHeadersWidth = 51;
             this.dgvPlaneaciones.RowTemplate.Height = 24;
-            this.dgvPlaneaciones.Size = new System.Drawing.Size(796, 358);
+            this.dgvPlaneaciones.Size = new System.Drawing.Size(389, 215);
             this.dgvPlaneaciones.TabIndex = 1;
             // 
             // btnNueva
             // 
-            this.btnNueva.Location = new System.Drawing.Point(41, 57);
+            this.btnNueva.Location = new System.Drawing.Point(14, 422);
             this.btnNueva.Name = "btnNueva";
             this.btnNueva.Size = new System.Drawing.Size(89, 27);
             this.btnNueva.TabIndex = 2;
@@ -68,7 +72,7 @@
             // 
             // btnVer
             // 
-            this.btnVer.Location = new System.Drawing.Point(136, 57);
+            this.btnVer.Location = new System.Drawing.Point(109, 422);
             this.btnVer.Name = "btnVer";
             this.btnVer.Size = new System.Drawing.Size(89, 27);
             this.btnVer.TabIndex = 2;
@@ -78,7 +82,7 @@
             // 
             // btnbtnExporatrPDF
             // 
-            this.btnbtnExporatrPDF.Location = new System.Drawing.Point(231, 57);
+            this.btnbtnExporatrPDF.Location = new System.Drawing.Point(204, 422);
             this.btnbtnExporatrPDF.Name = "btnbtnExporatrPDF";
             this.btnbtnExporatrPDF.Size = new System.Drawing.Size(89, 27);
             this.btnbtnExporatrPDF.TabIndex = 2;
@@ -86,12 +90,46 @@
             this.btnbtnExporatrPDF.UseVisualStyleBackColor = true;
             this.btnbtnExporatrPDF.Click += new System.EventHandler(this.btnbtnExporatrPDF_Click);
             // 
+            // dgvUnidades
+            // 
+            this.dgvUnidades.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvUnidades.Location = new System.Drawing.Point(12, 104);
+            this.dgvUnidades.Name = "dgvUnidades";
+            this.dgvUnidades.RowHeadersWidth = 51;
+            this.dgvUnidades.RowTemplate.Height = 24;
+            this.dgvUnidades.Size = new System.Drawing.Size(898, 310);
+            this.dgvUnidades.TabIndex = 3;
+            this.dgvUnidades.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUnidades_CellContentClick);
+            // 
+            // btnGuardarUnidades
+            // 
+            this.btnGuardarUnidades.Location = new System.Drawing.Point(38, 62);
+            this.btnGuardarUnidades.Name = "btnGuardarUnidades";
+            this.btnGuardarUnidades.Size = new System.Drawing.Size(106, 32);
+            this.btnGuardarUnidades.TabIndex = 4;
+            this.btnGuardarUnidades.Text = "button1";
+            this.btnGuardarUnidades.UseVisualStyleBackColor = true;
+            this.btnGuardarUnidades.Click += new System.EventHandler(this.btnGuardarUnidades_Click);
+            // 
+            // btnAgregarAlumno
+            // 
+            this.btnAgregarAlumno.Location = new System.Drawing.Point(166, 62);
+            this.btnAgregarAlumno.Name = "btnAgregarAlumno";
+            this.btnAgregarAlumno.Size = new System.Drawing.Size(95, 31);
+            this.btnAgregarAlumno.TabIndex = 5;
+            this.btnAgregarAlumno.Text = "agregar";
+            this.btnAgregarAlumno.UseVisualStyleBackColor = true;
+            this.btnAgregarAlumno.Click += new System.EventHandler(this.btnAgregarAlumno_Click);
+            // 
             // listaplaneaciones
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(734, 578);
+            this.Controls.Add(this.btnAgregarAlumno);
+            this.Controls.Add(this.btnGuardarUnidades);
+            this.Controls.Add(this.dgvUnidades);
             this.Controls.Add(this.btnbtnExporatrPDF);
             this.Controls.Add(this.btnVer);
             this.Controls.Add(this.btnNueva);
@@ -101,6 +139,7 @@
             this.Text = "listaplaneaciones";
             this.Load += new System.EventHandler(this.listaplaneaciones_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvPlaneaciones)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvUnidades)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -113,5 +152,8 @@
         private System.Windows.Forms.Button btnNueva;
         private System.Windows.Forms.Button btnVer;
         private System.Windows.Forms.Button btnbtnExporatrPDF;
+        private System.Windows.Forms.DataGridView dgvUnidades;
+        private System.Windows.Forms.Button btnGuardarUnidades;
+        private System.Windows.Forms.Button btnAgregarAlumno;
     }
 }

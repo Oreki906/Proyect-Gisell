@@ -28,7 +28,7 @@ namespace Login.fomrs
             Label lblNombre = new Label() { Text = "Nombre:", Location = new Point(10, 20), AutoSize = true };
             TextBox txtNombre = new TextBox() { Location = new Point(80, 18), Width = 180 };
 
-            Label lblCantidad = new Label() { Text = "Cantidad Alumnos:", Location = new Point(10, 60), AutoSize = true };
+            Label lblCantidad = new Label() { Text = "Unidades:", Location = new Point(10, 60), AutoSize = true };
             NumericUpDown numCantidad = new NumericUpDown() { Location = new Point(130, 58), Width = 130, Minimum = 0, Maximum = 1000 };
 
             Button btnAceptar = new Button() { Text = "Aceptar", Location = new Point(60, 100), DialogResult = DialogResult.OK };

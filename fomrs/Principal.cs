@@ -19,7 +19,7 @@ namespace Login.fomrs
     public partial class Principal : Form
 
     {
-        
+
         //Datos de conexión
         private string mySqlServer = "localhost";
         private string mySqlDatabase = "proyectogisell";
@@ -34,7 +34,8 @@ namespace Login.fomrs
         public Principal()
         {
             InitializeComponent();
-            
+            ConectarBD();
+
 
             this.FormBorderStyle = FormBorderStyle.None;
             flowLayoutPanel1.AutoScroll = true;
@@ -48,13 +49,13 @@ namespace Login.fomrs
 
 
 
-            
+
 
 
         }
 
 
-       private void ConectarBD()
+        private void ConectarBD()
         {
             try
             {
@@ -85,7 +86,7 @@ namespace Login.fomrs
             }
         }
         //para ejecutar comandos no borrar.... Julio 
-        
+
         private void EjecutaComando(string ConsultaSQL)
         {
             try
@@ -146,7 +147,7 @@ namespace Login.fomrs
 
         private void panel2_Paint_1(object sender, PaintEventArgs e)
         {
-           panel2.BackColor = Color.FromArgb(25, 42, 86);
+            panel2.BackColor = Color.FromArgb(25, 42, 86);
             btncalificaciones.BackColor = Color.FromArgb(25, 42, 86);
             btncalificaciones.FlatAppearance.BorderSize = 0;
             btnalumnos.BackColor = Color.FromArgb(25, 42, 86);
@@ -168,11 +169,6 @@ namespace Login.fomrs
         private void button1_Click(object sender, EventArgs e)
         {
             label1.Text = "Materias";
-            flowLayoutPanel1.Controls.Clear();
-            foreach (var t in listaTarjetas)
-            {
-                flowLayoutPanel1.Controls.Add(t);
-            }
             agregar.Visible = true;
             CargarMaterias();
 
@@ -187,58 +183,113 @@ namespace Login.fomrs
 
         private void btnalumnos_Click(object sender, EventArgs e)
         {
-            /*(Antes de modificar) 
-             agregar.Visible=false;
-              label1.Text = "Alumnos";
-              flowLayoutPanel1.Controls.Clear();
-              DataGridView alumnos = new DataGridView();
-              flowLayoutPanel1.Controls.Add(alumnos);
-              alumnos.Size = flowLayoutPanel1.Size;
-              alumnos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-              alumnos.Columns.Add("alumnos", "Alumnos");
-              alumnos.Columns.Add("calificaciones", "Calificaciones");
-            */
             label1.Text = "Alumnos";
+            agregar.Visible = false;
+
             flowLayoutPanel1.Controls.Clear();
 
-            // Crea el DataGridView
-            DataGridView alumnos = new DataGridView
+            // Panel contenedor principal
+            Panel contenedor = new Panel();
+            contenedor.Width = flowLayoutPanel1.Width - 20;
+            contenedor.Height = flowLayoutPanel1.Height - 20;
+            contenedor.Margin = new Padding(10);
+            contenedor.BackColor = Color.Transparent;
+
+            // DataGridView
+            DataGridView dgv = new DataGridView
             {
-                Size = flowLayoutPanel1.Size,
+                Dock = DockStyle.Fill,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                BackgroundColor = Color.White,
+                BorderStyle = BorderStyle.None,
                 ReadOnly = true,
-                AllowUserToAddRows = false
+                AllowUserToAddRows = false,
+                EnableHeadersVisualStyles = false
             };
-            flowLayoutPanel1.Controls.Add(alumnos);
+
+            contenedor.Controls.Add(dgv);
+            flowLayoutPanel1.Controls.Add(contenedor);
+
             try
             {
                 if (conexion == null || conexion.State != ConnectionState.Open)
                 {
-                    string strConn = $"Server={mySqlServer};Database={mySqlDatabase};Uid={mySqlUserId};Pwd={mySqlPassword};";
-                    conexion = new MySqlConnection(strConn);
+                    conexion = new MySqlConnection(
+                        $"Server={mySqlServer};Database={mySqlDatabase};Uid={mySqlUserId};Pwd={mySqlPassword};"
+                    );
                     conexion.Open();
                 }
 
-                // Consulta SQL para traer alumnos y calificaciones
-                string consulta = @"
-            SELECT 
+                // Consulta AGRUPADA (un alumno, muchas materias)
+                string query = @"
+            SELECT
+                a.id_Alumno,
                 CONCAT(a.Nombre, ' ', a.Apellido) AS Alumno,
-                IFNULL(c.Calificacion, 'Sin calificación') AS Calificacion
+                IFNULL(GROUP_CONCAT(m.Nombre_Materia SEPARATOR ', '), 'Sin materias') AS Materias
             FROM Alumnos a
-            LEFT JOIN Calificacion c ON a.id_Alumno = c.id_Alumno;
+            LEFT JOIN Alumno_Materia am ON a.id_Alumno = am.id_Alumno
+            LEFT JOIN Materias m ON am.id_Materia = m.id_Materia
+            GROUP BY a.id_Alumno, Alumno;
         ";
-                // Ejecutar consulta y llenar el DataGridView
-                using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
-                using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-                    alumnos.DataSource = dt;
+                    da.Fill(dt);
+                    dgv.DataSource = dt;
                 }
+
+                // Ocultar ID Alumno
+                if (dgv.Columns.Contains("id_Alumno"))
+                    dgv.Columns["id_Alumno"].Visible = false;
+
+                // Botón Ver Boleta
+                if (!dgv.Columns.Contains("Boleta"))
+                {
+                    DataGridViewButtonColumn btn = new DataGridViewButtonColumn();
+                    btn.Name = "Boleta";
+                    btn.HeaderText = "";
+                    btn.Text = "Ver boleta";
+                    btn.UseColumnTextForButtonValue = true;
+                    dgv.Columns.Add(btn);
+                }
+
+                dgv.CellClick -= Dgv_CellClick_Boleta;  // evitar duplicación de eventos
+                dgv.CellClick += Dgv_CellClick_Boleta;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error al cargar alumnos: " + ex.Message);
+            }
+        }
+        private void Dgv_CellClick_Boleta(object sender, DataGridViewCellEventArgs e)
+        {
+            var dgv = (DataGridView)sender;
+
+            if (e.RowIndex >= 0 && e.ColumnIndex == dgv.Columns["Boleta"].Index)
+            {
+                int idAlumno = Convert.ToInt32(dgv.Rows[e.RowIndex].Cells["id_Alumno"].Value);
+                string nombreAlumno = dgv.Rows[e.RowIndex].Cells["Alumno"].Value.ToString();
+
+                // Abrir boleta de TODAS las materias del alumno
+                FichaAlumno ficha = new FichaAlumno(idAlumno, nombreAlumno, conexion);
+                ficha.ShowDialog();
+            }
+        }
+
+
+        private void Dgv_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridView dgv = sender as DataGridView;
+
+            if (e.ColumnIndex == dgv.Columns["Detalle"].Index && e.RowIndex >= 0)
+            {
+                int idAlumno = Convert.ToInt32(dgv.Rows[e.RowIndex].Cells["id_Alumno"].Value);
+                string nombre = dgv.Rows[e.RowIndex].Cells["Alumno"].Value.ToString();
+
+                FichaAlumno ficha = new FichaAlumno(idAlumno, nombre, conexion);
+                ficha.ShowDialog();
             }
         }
 
@@ -263,62 +314,112 @@ namespace Login.fomrs
         private void panel1_MouseDown(object sender, MouseEventArgs e)
         {
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTitle_MouseDown);
-          
+
         }
         private void CrearMateria(string nombre, int idMateria)
         {
-            // Panel contenedor
+            // Panel de la tarjeta
             Panel tarjeta = new Panel();
             tarjeta.Width = 250;
-            tarjeta.Height = 100;
-            tarjeta.Margin = new Padding(10);
+            tarjeta.Height = 120;
+            tarjeta.Margin = new Padding(15);
             tarjeta.BackColor = Color.FromArgb(20, 25, 60);
             tarjeta.BorderStyle = BorderStyle.FixedSingle;
             tarjeta.Padding = new Padding(5);
-            // Etiqueta con el nombre
+
+
+           
+            Button btnEliminar = new Button();
+            btnEliminar.Size = new Size(28, 28);
+            btnEliminar.FlatStyle = FlatStyle.Flat;
+            btnEliminar.FlatAppearance.BorderSize = 0;
+            btnEliminar.BackColor = Color.Transparent;
+            btnEliminar.ForeColor = Color.White;
+            btnEliminar.Text = "🗑";   // Ícono Unicode
+            btnEliminar.Font = new Font("Segoe UI Emoji", 12, FontStyle.Regular);
+            btnEliminar.Cursor = Cursors.Hand;
+
+            // Ubicamos arriba a la derecha
+            btnEliminar.Location = new Point(tarjeta.Width - 35, 5);
+
+            // Evento eliminar
+            btnEliminar.Click += (s, e) =>
+            {
+                DialogResult confirm = MessageBox.Show(
+                    $"¿Eliminar la materia \"{nombre}\"?",
+                    "Confirmación",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (confirm == DialogResult.Yes)
+                {
+                    try
+                    {
+                        if (conexion.State != ConnectionState.Open)
+                            ConectarBD();
+
+                        string deleteQuery = "DELETE FROM Materias WHERE id_Materia = @id";
+                        using (MySqlCommand cmd = new MySqlCommand(deleteQuery, conexion))
+                        {
+                            cmd.Parameters.AddWithValue("@id", idMateria);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        MessageBox.Show("Materia eliminada correctamente.", "Eliminado",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        CargarMaterias();
+                    }
+                    catch (Exception ex2)
+                    {
+                        MessageBox.Show("Error al eliminar: " + ex2.Message);
+                    }
+                }
+            };
+
+
+            // ----------- TÍTULO DE LA MATERIA -------------
             Label lbl = new Label();
             lbl.Text = nombre;
             lbl.ForeColor = Color.White;
-            lbl.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+            lbl.Font = new Font("Segoe UI", 13, FontStyle.Bold);
             lbl.Dock = DockStyle.Top;
+            lbl.Height = 40;
             lbl.TextAlign = ContentAlignment.MiddleCenter;
-            // Botón para abrir el formulario de la materia
+
+
+            // ----------- BOTÓN ABRIR -------------
             Button btnAbrir = new Button();
             btnAbrir.Text = "Abrir";
+            btnAbrir.Height = 35;
             btnAbrir.Dock = DockStyle.Bottom;
-            btnAbrir.Height = 30;
             btnAbrir.FlatStyle = FlatStyle.Flat;
+            btnAbrir.FlatAppearance.BorderSize = 0;
             btnAbrir.ForeColor = Color.White;
-            btnAbrir.BackColor = Color.FromArgb(40, 60, 120);
+            btnAbrir.BackColor = Color.FromArgb(45, 65, 130);
+            btnAbrir.Cursor = Cursors.Hand;
 
             btnAbrir.Click += (s, e) =>
             {
                 if (conexion == null || conexion.State != ConnectionState.Open)
                     ConectarBD();
 
-               listaplaneaciones lista = new listaplaneaciones(idMateria, nombre, conexion);
+                listaplaneaciones lista = new listaplaneaciones(idMateria, nombre, conexion);
                 lista.TopLevel = false;
                 lista.Dock = DockStyle.Fill;
 
                 flowLayoutPanel1.Controls.Clear();
                 flowLayoutPanel1.Controls.Add(lista);
                 lista.Show();
-                
-
             };
-            // Agregar controles a la tarjeta
+
+
+            // Agregar controles en orden
+            tarjeta.Controls.Add(btnEliminar); // que quede arriba
             tarjeta.Controls.Add(lbl);
             tarjeta.Controls.Add(btnAbrir);
 
-            // Agregar controles a la lista de tarjetas
             listaTarjetas.Add(tarjeta);
-
-            // Agregar tarjetas al FlowLayoutPanel
-            foreach (var t in listaTarjetas)
-            {
-                flowLayoutPanel1.Controls.Add(tarjeta);
-            }
-
         }
         private int contador = 1;
 
@@ -334,11 +435,11 @@ namespace Login.fomrs
                 if (resultado == DialogResult.OK)
                 {
                     string nombreMateria = nuevaMateria.NombreMateria;
-                    int cantidadAlumnos = nuevaMateria.CantidadAlumnos;
+                    int cunidades = nuevaMateria.CantidadAlumnos;
 
                     int idUsuario = 1;
 
-                    string insertQuery = "INSERT INTO Materias (Nombre_Materia, Cantidad_Alumnos, id_Usuario) VALUES (@nombre, @cantidad, @idUsuario)";
+                    string insertQuery = "INSERT INTO Materias (Nombre_Materia, Unidades, id_Usuario) VALUES (@nombre, @unidades, @idUsuario)";
                     try
                     {
                         if (conexion == null || conexion.State != ConnectionState.Open)
@@ -347,7 +448,7 @@ namespace Login.fomrs
                         using (MySqlCommand cmd = new MySqlCommand(insertQuery, conexion))
                         {
                             cmd.Parameters.AddWithValue("@nombre", nombreMateria);
-                            cmd.Parameters.AddWithValue("@cantidad", cantidadAlumnos);
+                            cmd.Parameters.AddWithValue("@unidades", cunidades);
                             cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
                             cmd.ExecuteNonQuery();
                         }
@@ -388,6 +489,11 @@ namespace Login.fomrs
                         CrearMateria(nombre, idMateria);
                     }
                 }
+
+                // Agregar tarjetas una sola vez
+                foreach (var t in listaTarjetas)
+                    flowLayoutPanel1.Controls.Add(t);
+
             }
             catch (Exception ex)
             {
@@ -407,7 +513,7 @@ namespace Login.fomrs
             this.Hide();
         }
 
-        
+
 
         private void button1_Click_1(object sender, EventArgs e)
         {
@@ -422,6 +528,7 @@ namespace Login.fomrs
 
         private void btnAgenda_Click(object sender, EventArgs e)
         {
+            CargarMaterias();
             if (agenda == null || agenda.IsDisposed)
             {
                 agenda = new Agenda(this, conexion);
@@ -433,5 +540,6 @@ namespace Login.fomrs
                 agenda.Focus();
             }
         }
+
     }
 }

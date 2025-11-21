@@ -28,6 +28,8 @@ namespace Login.fomrs
             InicializarTabla();
             CargarSemana();
             ActualizarTituloSemana();
+
+          //  tblAgenda.BackColor = Color.FromArgb(240, 230, 210);
         }
 
         private DateTime ObtenerLunes(DateTime fecha)

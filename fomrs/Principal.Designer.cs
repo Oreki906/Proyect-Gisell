@@ -30,20 +30,18 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Principal));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnSalir = new System.Windows.Forms.Button();
             this.agregar = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnSalir = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btnAgenda = new System.Windows.Forms.Button();
             this.btnPerfil = new System.Windows.Forms.Button();
-            this.lblCorreo = new System.Windows.Forms.Label();
-            this.lblNombre = new System.Windows.Forms.Label();
-            this.roundedPictureBox1 = new Login.RoundedPictureBox();
-            this.btncalificaciones = new System.Windows.Forms.Button();
             this.btnalumnos = new System.Windows.Forms.Button();
-            this.btnasistencias = new System.Windows.Forms.Button();
             this.btnmaterias = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.btnAgenda = new System.Windows.Forms.Button();
+            this.roundedPictureBox1 = new Login.RoundedPictureBox();
+            this.btncalificaciones = new System.Windows.Forms.Button();
+            this.btnasistencias = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.roundedPictureBox1)).BeginInit();
@@ -52,27 +50,16 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.agregar);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1371, 50);
+            this.panel1.Size = new System.Drawing.Size(1484, 50);
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
-            // 
-            // btnSalir
-            // 
-            this.btnSalir.Location = new System.Drawing.Point(515, 8);
-            this.btnSalir.Name = "btnSalir";
-            this.btnSalir.Size = new System.Drawing.Size(75, 23);
-            this.btnSalir.TabIndex = 2;
-            this.btnSalir.Text = "Salir";
-            this.btnSalir.UseVisualStyleBackColor = true;
-            this.btnSalir.Click += new System.EventHandler(this.btnSalir_Click);
             // 
             // agregar
             // 
@@ -96,29 +83,46 @@
             this.label1.Size = new System.Drawing.Size(0, 54);
             this.label1.TabIndex = 0;
             // 
+            // btnSalir
+            // 
+            this.btnSalir.Location = new System.Drawing.Point(515, 8);
+            this.btnSalir.Name = "btnSalir";
+            this.btnSalir.Size = new System.Drawing.Size(75, 23);
+            this.btnSalir.TabIndex = 2;
+            this.btnSalir.Text = "Salir";
+            this.btnSalir.UseVisualStyleBackColor = true;
+            // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.Red;
             this.panel2.Controls.Add(this.btnAgenda);
             this.panel2.Controls.Add(this.btnPerfil);
-            this.panel2.Controls.Add(this.lblCorreo);
-            this.panel2.Controls.Add(this.lblNombre);
             this.panel2.Controls.Add(this.roundedPictureBox1);
             this.panel2.Controls.Add(this.btncalificaciones);
             this.panel2.Controls.Add(this.btnalumnos);
             this.panel2.Controls.Add(this.btnasistencias);
             this.panel2.Controls.Add(this.btnmaterias);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel2.Location = new System.Drawing.Point(0, 41);
+            this.panel2.Location = new System.Drawing.Point(0, 50);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(349, 700);
             this.panel2.TabIndex = 0;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint_1);
             // 
+            // btnAgenda
+            // 
+            this.btnAgenda.Location = new System.Drawing.Point(139, 194);
+            this.btnAgenda.Name = "btnAgenda";
+            this.btnAgenda.Size = new System.Drawing.Size(75, 23);
+            this.btnAgenda.TabIndex = 9;
+            this.btnAgenda.Text = "Agenda";
+            this.btnAgenda.UseVisualStyleBackColor = true;
+            this.btnAgenda.Click += new System.EventHandler(this.btnAgenda_Click);
+            // 
             // btnPerfil
             // 
-            this.btnPerfil.Location = new System.Drawing.Point(41, 176);
+            this.btnPerfil.Location = new System.Drawing.Point(31, 195);
             this.btnPerfil.Margin = new System.Windows.Forms.Padding(2);
             this.btnPerfil.Name = "btnPerfil";
             this.btnPerfil.Size = new System.Drawing.Size(87, 22);
@@ -127,23 +131,45 @@
             this.btnPerfil.UseVisualStyleBackColor = true;
             this.btnPerfil.Click += new System.EventHandler(this.btnPerfil_Click);
             // 
-            // lblCorreo
+            // btnalumnos
             // 
-            this.lblCorreo.AutoSize = true;
-            this.lblCorreo.Location = new System.Drawing.Point(204, 110);
-            this.lblCorreo.Name = "lblCorreo";
-            this.lblCorreo.Size = new System.Drawing.Size(48, 16);
-            this.lblCorreo.TabIndex = 6;
-            this.lblCorreo.Text = "Correo";
+            this.btnalumnos.BackColor = System.Drawing.Color.White;
+            this.btnalumnos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnalumnos.Font = new System.Drawing.Font("Nirmala Text", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnalumnos.ForeColor = System.Drawing.Color.White;
+            this.btnalumnos.Location = new System.Drawing.Point(0, 375);
+            this.btnalumnos.Margin = new System.Windows.Forms.Padding(2);
+            this.btnalumnos.Name = "btnalumnos";
+            this.btnalumnos.Size = new System.Drawing.Size(347, 52);
+            this.btnalumnos.TabIndex = 2;
+            this.btnalumnos.Text = "Alumnos";
+            this.btnalumnos.UseVisualStyleBackColor = false;
+            this.btnalumnos.Click += new System.EventHandler(this.btnalumnos_Click);
             // 
-            // lblNombre
+            // btnmaterias
             // 
-            this.lblNombre.AutoSize = true;
-            this.lblNombre.Location = new System.Drawing.Point(203, 82);
-            this.lblNombre.Name = "lblNombre";
-            this.lblNombre.Size = new System.Drawing.Size(56, 16);
-            this.lblNombre.TabIndex = 5;
-            this.lblNombre.Text = "Nombre";
+            this.btnmaterias.BackColor = System.Drawing.Color.White;
+            this.btnmaterias.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnmaterias.Font = new System.Drawing.Font("Nirmala Text", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnmaterias.ForeColor = System.Drawing.Color.White;
+            this.btnmaterias.Location = new System.Drawing.Point(0, 280);
+            this.btnmaterias.Margin = new System.Windows.Forms.Padding(2);
+            this.btnmaterias.Name = "btnmaterias";
+            this.btnmaterias.Size = new System.Drawing.Size(347, 51);
+            this.btnmaterias.TabIndex = 0;
+            this.btnmaterias.Text = "Materias";
+            this.btnmaterias.UseVisualStyleBackColor = false;
+            this.btnmaterias.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(26)))), ((int)(((byte)(26)))));
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(349, 50);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(1135, 700);
+            this.flowLayoutPanel1.TabIndex = 1;
             // 
             // roundedPictureBox1
             // 
@@ -175,21 +201,6 @@
             this.btncalificaciones.UseVisualStyleBackColor = false;
             this.btncalificaciones.Click += new System.EventHandler(this.btncalificaciones_Click);
             // 
-            // btnalumnos
-            // 
-            this.btnalumnos.BackColor = System.Drawing.Color.White;
-            this.btnalumnos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnalumnos.Font = new System.Drawing.Font("Nirmala Text", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnalumnos.ForeColor = System.Drawing.Color.White;
-            this.btnalumnos.Location = new System.Drawing.Point(0, 375);
-            this.btnalumnos.Margin = new System.Windows.Forms.Padding(2);
-            this.btnalumnos.Name = "btnalumnos";
-            this.btnalumnos.Size = new System.Drawing.Size(347, 52);
-            this.btnalumnos.TabIndex = 2;
-            this.btnalumnos.Text = "Alumnos";
-            this.btnalumnos.UseVisualStyleBackColor = false;
-            this.btnalumnos.Click += new System.EventHandler(this.btnalumnos_Click);
-            // 
             // btnasistencias
             // 
             this.btnasistencias.BackColor = System.Drawing.Color.White;
@@ -205,47 +216,12 @@
             this.btnasistencias.UseVisualStyleBackColor = false;
             this.btnasistencias.Click += new System.EventHandler(this.btnasistencias_Click);
             // 
-            // btnmaterias
-            // 
-            this.btnmaterias.BackColor = System.Drawing.Color.White;
-            this.btnmaterias.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnmaterias.Font = new System.Drawing.Font("Nirmala Text", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnmaterias.ForeColor = System.Drawing.Color.White;
-            this.btnmaterias.Location = new System.Drawing.Point(0, 280);
-            this.btnmaterias.Margin = new System.Windows.Forms.Padding(2);
-            this.btnmaterias.Name = "btnmaterias";
-            this.btnmaterias.Size = new System.Drawing.Size(347, 51);
-            this.btnmaterias.TabIndex = 0;
-            this.btnmaterias.Text = "Materias";
-            this.btnmaterias.UseVisualStyleBackColor = false;
-            this.btnmaterias.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(26)))), ((int)(((byte)(26)))));
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(262, 41);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(1022, 700);
-            this.flowLayoutPanel1.TabIndex = 1;
-            // 
-            // btnAgenda
-            // 
-            this.btnAgenda.Location = new System.Drawing.Point(142, 176);
-            this.btnAgenda.Name = "btnAgenda";
-            this.btnAgenda.Size = new System.Drawing.Size(75, 23);
-            this.btnAgenda.TabIndex = 9;
-            this.btnAgenda.Text = "Agenda";
-            this.btnAgenda.UseVisualStyleBackColor = true;
-            this.btnAgenda.Click += new System.EventHandler(this.btnAgenda_Click);
-            // 
             // Principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1371, 750);
+            this.ClientSize = new System.Drawing.Size(1484, 750);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
@@ -256,7 +232,6 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.roundedPictureBox1)).EndInit();
             this.ResumeLayout(false);
 
@@ -267,17 +242,15 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnmaterias;
-        private System.Windows.Forms.Button btncalificaciones;
         private System.Windows.Forms.Button btnalumnos;
-        private System.Windows.Forms.Button btnasistencias;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button agregar;
         private RoundedPictureBox roundedPictureBox1;
-        private System.Windows.Forms.Label lblCorreo;
-        private System.Windows.Forms.Label lblNombre;
         private System.Windows.Forms.Button btnPerfil;
         private System.Windows.Forms.Button btnSalir;
         private System.Windows.Forms.Button btnAgenda;
+        private System.Windows.Forms.Button btncalificaciones;
+        private System.Windows.Forms.Button btnasistencias;
     }
 }
